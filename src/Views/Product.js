@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Product.css";
+import convertDollarToNpr from "../utiities/convertDollarToNpr";
 
-const Product = () => {
+const Product = (props) => {
   const url = `https://electronic-ecommerce.herokuapp.com/api/v1/product`;
 
   const [products, setProducts] = useState({
@@ -53,29 +54,43 @@ const Product = () => {
 
   return (
     <div>
-      <h3>Products</h3>
-      <button className=" product-filter-button">filter</button>
+      <div className="product-header">
+        <h3>Products</h3>
+        <button className=" product-filter-button">filter</button>
+      </div>
       {console.log(products.data)}
-      <div className="products">
+      <div className="row">
         {products.data.map((item) => (
-          <>
+          <div className="col-3">
             <div className="card d-inline-block">
               <div>
                 <img
                   className="product-image"
-                  src="https://electronic-ecommerce.herokuapp.com/fantechHeadset.jpg"
+                  src={
+                    "https://electronic-ecommerce.herokuapp.com/" + item.image
+                  }
                   alt={item.name}
                 />
               </div>
               <div className="product-name">
                 <h6>{item.name}</h6>
               </div>
-              <div className="product-price">{item.price}</div>
+              <div className="product-price">
+                {convertDollarToNpr(item.price)}
+              </div>
 
               <div className="add-minus-quantity">
-                <i className="fas fa-minus minus" aria-hidden="true"></i>
-                <input type="text" placeholder="2" />
-                <i className="fas fa-plus plus" aria-hidden="true"></i>
+                <i
+                  className="fas fa-minus minus"
+                  aria-hidden="true"
+                  onClick={() => props.handleDelete(item)}
+                ></i>
+                <input type="text" value={props.getCartValue(item)} />
+                <i
+                  className="fas fa-plus plus"
+                  aria-hidden="true"
+                  onClick={() => props.handleAddToCart(item)}
+                ></i>
               </div>
 
               <div className="product-stock">
@@ -86,10 +101,15 @@ const Product = () => {
               </div>
 
               <div>
-                <button className="product-add-button">Add to Cart</button>
+                <button
+                  className="product-add-button"
+                  onClick={() => props.handleAddToCart(item)}
+                >
+                  Add to Cart
+                </button>
               </div>
             </div>
-          </>
+          </div>
         ))}
       </div>
     </div>

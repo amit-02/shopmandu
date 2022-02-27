@@ -3,7 +3,7 @@ import { Container, Navbar, Link, Nav, Badge } from "react-bootstrap";
 
 import Cart from "./Cart";
 
-const Header = () => {
+const Header = (props) => {
   return (
     <Navbar bg="primary" variant="dark" style={{ height: 80 }}>
       <Container>
@@ -14,8 +14,15 @@ const Header = () => {
           <Nav.Link>
             <a>Home</a>
           </Nav.Link>
-          <Cart />
-          <Badge>{10}</Badge>
+          <Cart
+            cartItem={props.cartItem}
+            getCartValue={props.getCartValue}
+            handleAddToCart={props.handleAddToCart}
+            handleDelete={props.handleDelete}
+          />
+          <Badge bg="danger" style={{ height: 20 }}>
+            {props.cartItem.length}
+          </Badge>
         </Nav>
       </Container>
     </Navbar>

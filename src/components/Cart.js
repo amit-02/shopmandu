@@ -2,8 +2,10 @@ import { useState } from "react";
 import React from "react";
 import { Modal, Button } from "react-bootstrap";
 import Product from "../Views/Product";
+import "./Cart.css";
+import convertDollarToNpr from "../utiities/convertDollarToNpr";
 
-const Cart = () => {
+const Cart = (props) => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -19,14 +21,52 @@ const Cart = () => {
           <Modal.Title>Items added</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="cart-items">
-            <h6 className="cart-items-header">cart items</h6>
-          </div>
+          <ul className="list-group">
+            {props.cartItem.map((item) => (
+              <li className="list-group-item">
+                <div className="cart-item">
+                  <div className="cart-item-left">
+                    <img
+                      src={
+                        "https://electronic-ecommerce.herokuapp.com/" +
+                        item.image
+                      }
+                    />
+                    <div>
+                      <h6>{item.name}</h6>
+                      <p>{convertDollarToNpr(item.price)}</p>
+                    </div>
+                  </div>
+
+                  <div className="cart-item-right">
+                    <p> item:{item.quantity}</p>
+                    <div className="add-minus-quantity">
+                      <i
+                        className="fas fa-minus minus"
+                        aria-hidden="true"
+                        onClick={() => props.handleDelete(item)}
+                      ></i>
+                      <input type="text" value={props.getCartValue(item)} />
+                      <i
+                        className="fas fa-plus plus"
+                        aria-hidden="true"
+                        onClick={() => props.handleAddToCart(item)}
+                      ></i>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={handleClose}>
-            Checkout
-          </Button>
+          <div className="total-amount">
+            <p>Total Amount:</p>
+
+            <Button variant="primary" onClick={handleClose}>
+              Checkout
+            </Button>
+          </div>
         </Modal.Footer>
       </Modal>
     </div>
